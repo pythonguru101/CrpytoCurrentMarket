@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+
+{% block list %}
+<a name="top"><center><p>Triangles Screener</p></center></a>
+<br>
+<table id="prices" style="width: 100%; border: 0px;"><tr>
+<td style="align:left;">Controller: <select name="controller" id="controller" onchange="get_screener();">
+{% for i in data.controllers %}
+	<option value="{{ i.controller }}"{{ i.selected }}>{{ i.controller }}</option>
+{% endfor %}
+</select>
+</td>
+</tr></table>
+
+<table id="prices" style="width: 100%;">
+<tr>
+<th>Ticker 1</th>
+<th>Bid</th>
+<th>Ask</th>
+<th>Ticker 2</th>
+<th>Bid</th>
+<th>Ask</th>
+<th>Ticker 3</th>
+<th>Bid</th>
+<th>Ask</th>
+<th>B/S</th>
+<th>Pot.Profit</th>
+</tr>
+
+{% if data.prices|length == 0 %}
+</table>
+<center>There are no active tickers for this controller</center>
+{% else %}
+{% for n in data.prices %}
+<tr>
+<td id="ticker"><b>{{ n.ticker1 }}</b></td>
+<td id="price"><b>{{ n.bid1|safe }}</b></td>
+<td id="price"><b>{{ n.ask1|safe }}</b></td>
+<td id="ticker"><b>{{ n.ticker2 }}</b></td>
+<td id="price"><b>{{ n.bid2|safe }}</b></td>
+<td id="price"><b>{{ n.ask2|safe }}</b></td>
+<td id="ticker"><b>{{ n.ticker3 }}</b></td>
+<td id="price"><b>{{ n.bid3|safe }}</b></td>
+<td id="price"><b>{{ n.ask3|safe }}</b></td>
+<td id="ticker"><b>{{ n.bs }}</b></td>
+<td id="price"><b>{{ n.pot_profit|safe }}%</b></td>
+</tr>
+{% endfor %}
+</table>
+<p><a href="#top">Back to top</a></p>
+{% endif %}
+<br><br>
+
+<script>
+function get_screener() {
+	controller = document.getElementById('controller').value;
+	document.location.assign('triangles.html?controller='+controller);
+
+	return;
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>
+<title>CMC</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datepicker.css') }}" />
+<script type="text/javascript" src="{{ url_for('static', filename='datepicker.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='timepicker.js') }}"></script>
+<style>
+  table{
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: grey;
+  }
+{#  th{#}
+{#    font-family: sans-serif;#}
+{#    padding-top: 12px;#}
+{#    padding-bottom: 12px;#}
+{#    text-align: center;#}
+{#    background-color: DarkBlue;#}
+{#    color: white;#}
+{#  }#}
+{#  td{#}
+{#    border: 1px solid black;#}
+{#  }#}
+</style>
+</head>
+
+<body>
+
+<center><ul>
+<li><p><a href="index.html">&lt;&lt;&nbsp;Back to main page</a></p></li>
+</ul></center>
+<br>
+<table class="cmc2" style="width: 100%">
+  <tbody>
+  <tr>
+    <td style="align:left;">
+      <label>Coin Name: </label>
+      <select name="coin" id="coin" onchange="get_selected_coin();">
+        {% for i in data.ticker_list %}
+          {% if i.ticker == data.coin_sel %}
+            <option value="{{ i.ticker }}" selected>{{ i.ticker }}</option>
+          {% else %}
+            <option value="{{ i.ticker }}">{{ i.ticker }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </td>
+    <td>
+      <h2>{{ data.coin_sel }}</h2>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+{% include 'chart.html' %}
+
+<br>
+
+<table style="width:100%" class="cmc">
+  <thead>
+    <tr>
+      <th>Market Cap</th>
+      <th>Day Range</th>
+      <th>Volume (24h)</th>
+      {#<th>Circulating Supply</th>#}
+    </tr>
+  </thead>
+  <tr>
+    <td align="center">{{ data.market_cap }}</td>
+    <td align="center">{{ data.day_range_max - data.day_range_min }}</td>
+    <td align="center">{{ data.volume24 }}</td>
+    {#<td align="center">{{ data.circulating_supply }}</td>#}
+  </tr>
+</table>
+<br><br>
+
+<table style="width: 100%">
+  <tr>
+    <td class="cmc1">Price in USD</td><td class="cmc2">{{ data.price_in_usd }}</td>
+    <td class="cmc1">Market Cap</td><td class="cmc2">{{ data.market_cap }}</td>
+    <td class="cmc1">Cap in BTC</td><td class="cmc2">{{ data.cap_in_btc }}</td>
+  </tr>
+  <tr>
+    <td class="cmc1">Price in BTC</td><td class="cmc2">{{ data.price_in_btc }}</td>
+    <td class="cmc1">Updated</td><td class="cmc2">{{ data.updated }}</td>
+    <td class="cmc1">% 7d in USD</td>
+    {% if data.pro_7d >= 0 %}
+      <td class="cmc2" style="color: green;">{{ data.pro_7d }}</td>
+    {% else %}
+      <td class="cmc2" style="color: red;">{{ data.pro_7d }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td class="cmc1">Price in ETH</td><td class="cmc2">{{ data.price_in_eth }}</td>
+    <td class="cmc1">1w Range</td><td class="cmc2">{{ data.range_max_7d - data.range_min_7d }}</td>
+    <td class="cmc1">% 1m in USD</td>
+    {% if data.pro_1m >= 0 %}
+      <td class="cmc2" style="color: green;">{{ data.pro_1m }}</td>
+    {% else %}
+      <td class="cmc2" style="color: red;">{{ data.pro_1m }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td class="cmc1">Vol(24h)</td><td class="cmc2">{{ data.volume24 }}</td>
+    <td class="cmc1">52w Range</td><td class="cmc2">{{ data.range_max_52w - data.range_min_52w }}</td>
+    <td class="cmc1">% 6m in USD</td>
+    {% if data.pro_6m >= 0 %}
+      <td class="cmc2" style="color: green;">{{ data.pro_6m }}</td>
+    {% else %}
+      <td class="cmc2" style="color: red;">{{ data.pro_6m }}</td>
+    {% endif %}
+  </tr>
+  <tr>
+    <td class="cmc1">Average Vol(52w)</td><td class="cmc2">{{ data.average_vol_52w }}</td>
+    <td class="cmc1">All Time High</td><td class="cmc2">{{ data.all_time_high }}</td>
+    <td class="cmc1">% from ATH</td><td class="cmc2" style="color: red;">{{ -data.percent_from_ath/data.all_time_high *100 }}</td>
+  </tr>
+</table>
+<br><br>
+
+<table style="width: 100%" class="cmc">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Ticker</th>
+      <th>Price in USD</th>
+      <th>Market Cap</th>
+      <th>Volume</th>
+    </tr>
+  </thead>
+  {% for i in data.ticker_list %}
+    <tr>
+      <td>{{ i.rank }}</td>
+      <td><a href="coinmarketcap.html?coin={{ i.ticker }}">{{ i.ticker }}</a></td>
+      <td>{{ i.last }}</td>
+      <td>{{ i.market_cap }}</td>
+      <td>{{ i.volume }}</td>
+    </tr>
+  {% endfor %}
+</table>
+</body>
+
+<script>
+function get_selected_coin() {
+    coin = document.getElementById('coin').value;
+	  document.location.href = 'coinmarketcap.html?coin='+coin;
+	  return;
+}
+</script>
+
+</html>

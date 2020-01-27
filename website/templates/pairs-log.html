@@ -1,0 +1,44 @@
+{% extends "index-alt.html" %}
+
+{% block list %}
+<a name="top"><center><p>Opportunities Log</p></center></a>
+<br>
+
+<table id="prices" style="width: 100%;">
+<tr>
+<th>Date</th>
+<th>List Amount</th>
+<th>&nbsp;</th>
+</tr>
+
+{% if data.log|length == 0 %}
+</table>
+<center>There are no listings for this controller</center>
+{% else %}
+{% for n in data.log %}
+<tr>
+<td id="ticker"><b>{{ n.log_date }}</b></td>
+<td id="price"><b>{{ n.occurrences }}</b></td>
+<td id="ticker"><input type="button" name="{{ n.secs }}" value="View Details" onclick="document.location.assign('view-log.html?secs={{ n.secs }}');"></td>
+</tr>
+{% endfor %}
+</table><br>
+
+<center><table cellspacing="10"><tr>
+{% for i in data.pages %}
+<td style="border-style: solid; border-width: 1px">&nbsp;{{ i|safe }}&nbsp;</td>
+{% endfor %}
+</tr></table></center>
+{% endif %}
+<br><br>
+
+<script>
+function get_screener() {
+	controller = document.getElementById('controller').value;
+	document.location.assign('triangles.html?controller='+controller);
+
+	return;
+}
+</script>
+
+{% endblock %}

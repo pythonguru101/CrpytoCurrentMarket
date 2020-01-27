@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Times configuration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+<script language="javascript">
+function update_list() {
+	var modified = document.getElementById('modified');
+
+
+	var xhr = new XMLHttpRequest();
+	{% for i in data.controllers %}
+	var key = document.getElementById('{{ i.controller }}-key').value;
+	var secret = document.getElementById('{{ i.controller }}-secret').value;
+	var passphrase = document.getElementById('{{ i.controller }}-passphrase').value;
+	alert('http://127.0.0.1:8080/save-keys.html?controller={{ i.controller }}&key='+key+'&secret='+secret+'&passphrase='+passphrase');
+	var url = '/save-keys.html?controller={{ i.controller }}&key='+key+'&secret='+secret+'&passphrase='+passphrase;
+
+	xhr.open('GET', url, false);
+	xhr.send();
+	{% endfor %}
+
+	modified.value="1";
+
+	return;
+}
+function confirm_modified() {
+	var response;
+	var modified = document.getElementById('modified');
+
+	if (modified.value == "1") {
+		response = confirm("Do you want to exit without Apply Changes?");
+		if (!response)
+			return false;
+	}
+
+	return true;
+}
+</script>
+</head>
+
+{% if data.finished == 1 %}
+<body onload="window.alert('All changes saved!');">
+{% else %}
+<body>
+{% endif %}
+<center><ul>
+<li><p><a href="index.html" onclick="return confirm_modified();">&lt;&lt;&nbsp;Back to main page</a></p></li>
+<li><a href="apply.html" onclick="update_list();"><p>Apply Changes</p></a></li>
+</ul></center>
+<br>
+
+<form action="save-keys.html" method="GET">
+<input type="hidden" name="modified" id="modified" value="{{ data.modified }}">
+
+<center><p>Times Configuration</p></center>
+
+<table id="tickers">
+<tr>
+<th>Item</th>
+<th>Keys</th>
+</tr>
+{% for i in data.controllers %}
+<tr>
+<td>&nbsp;</td><td>&nbsp;</td>
+</tr><tr>
+<td >{{ i.controller }} API Key:</td>
+<td><input type="text" id="{{ i.controller }}-key" size="100" maxlength="255" name="{{ i.controller }}-key" value="{{ i.api_key }}" onchange="document.getElementById('modified').value = '1';"></td>
+</tr><tr>
+<td>{{ i.controller }} API secret:</td>
+<td><input type="text" id="{{ i.controller }}-secret" size="100" maxlength="255" name="{{ i.controller }}-secret" value="{{ i.api_secret }}" onchange="document.getElementById('modified').value = '1';"></td>
+</tr><tr>
+<td>{{ i.controller }} Passphrase:</td>
+<td><input type="text" id="{{ i.controller }}-passphrase" size="100" maxlength="255" name="{{ i.controller }}-passphrase" value="{{ i.passphrase }}" onchange="document.getElementById('modified').value = '1';"></td>
+</tr>
+{% endfor %}
+</table><br>
+
+</body>
+</html>
+

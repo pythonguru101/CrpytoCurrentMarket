@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+{% block list %}
+<a name="top"><center><p>Pairs Screener</p></center></a>
+<br>
+
+<table id="prices" style="width: 100%;">
+<tr>
+<th>Binance</th>
+<th>Bid</th>
+<th>Ask</th>
+<th>Bitfinex</th>
+<th>Bid</th>
+<th>Ask</th>
+</tr>
+
+{% if data.prices|length == 0 %}
+</table>
+<center>There are no active tickers for this controller</center>
+{% else %}
+{% for n in data.prices %}
+<tr>
+<td id="ticker"><b>{{ n.ticker1 }}</b></td>
+<td id="price"><b>{{ n.bid1|safe }}</b></td>
+<td id="price"><b>{{ n.ask1|safe }}</b></td>
+<td id="ticker"><b>{{ n.ticker2 }}</b></td>
+<td id="price"><b>{{ n.bid2|safe }}</b></td>
+<td id="price"><b>{{ n.ask2|safe }}</b></td>
+</tr>
+{% endfor %}
+</table><br>
+
+<center><table cellspacing="10"><tr>
+{% for i in data.pages %}
+<td style="border-style: solid; border-width: 1px">&nbsp;{{ i|safe }}&nbsp;</td>
+{% endfor %}
+</tr></table></center>
+{% endif %}
+<br><br>
+
+<script>
+function get_screener() {
+	controller = document.getElementById('controller').value;
+	document.location.assign('triangles.html?controller='+controller);
+
+	return;
+}
+</script>
+
+{% endblock %}

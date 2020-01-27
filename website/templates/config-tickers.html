@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ticker configuration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+<script language="javascript">
+function update_list(ticker, active) {
+	var modified = document.getElementById('modified');
+	if (active == 0) {
+		active = 1;
+	} else {
+		active = 0;
+	}
+	var xhr = new XMLHttpRequest();
+	//alert('update-list.html?ticker='+ticker+'&active='+active);
+	xhr.open('GET', 'update-list.html?ticker='+ticker+'&active='+active);
+	xhr.send();
+
+	modified.value = "1";
+
+	return;
+}
+function update_controller(controller, checked) {
+	var controller = document.getElementById('controller').value;
+	var search = document.getElementById('search').value;
+	var ticker_ids = "";
+	var active = 0;
+	if (checked) {
+		active = 1;
+	}
+
+	// -- update database --
+	var modified = document.getElementById('modified');
+	var xhr = new XMLHttpRequest();
+	//alert('update-controller.html?controller='+controller+'&search='+search+'&active='+active);
+	xhr.open('GET', 'update-controller.html?controller='+controller+'&search='+search+'&active='+active);
+	xhr.send();
+
+	// -- update page --
+	var xhr = new XMLHttpRequest();
+	xhr.responseType = 'json';
+	//alert('get-controller-ids.html?controller='+controller+'&search='+search);
+	xhr.open('GET', 'get-controller-ids.html?controller='+controller+'&search='+search, true);
+	xhr.onload  = function() {
+		var jsonResponse = xhr.response;
+		//window.alert(jsonResponse.tickers)
+		for (var i=0; i<jsonResponse.tickers.length; i++) {
+			checkbox = document.getElementById(jsonResponse.tickers[i]);
+			checkbox.checked = checked;
+		}
+	};
+	xhr.send(null);
+
+	modified.value="1";
+
+	return;
+}
+function confirm_modified() {
+	var response;
+	var modified = document.getElementById('modified');
+
+	if (modified.value == "1") {
+		response = confirm("Do you want to exit without Apply Changes?");
+		if (!response)
+			return false;
+	}
+
+	return true;
+}
+function change_controller() {
+	var search = document.getElementById('search').value;
+	var controller = document.getElementById('controller').value;
+
+	document.location.assign('config-tickers.html?controller='+controller+'&search='+search);
+
+	return;
+}
+</script>
+</head>
+
+{% if data.finished == 1 %}
+<body onload="window.alert('All changes saved!');">
+{% else %}
+<body>
+{% endif %}
+<a name="top"><center><p>Ticker configuration</p></center></a>
+<br>
+
+<center><ul>
+<li><p><a href="index.html" onclick="return confirm_modified();">&lt;&lt;&nbsp;Back to main page</a></p></li>
+<li><a href="apply.html?controller={{ data.controller }}&search={{ data.search }}"><p>Apply Changes</p></a></li>
+</ul></center>
+<br>
+
+<input type="hidden" name="modified" id="modified" value="{{ data.modified }}">
+
+<center><p>Controller Summary</p></center>
+
+<table id="prices" style="width: 100%; border: 0px;"><tr>
+<td style="align:left; border: 0px;">Controller: 
+<select name="controller" id="controller" onchange="change_controller();">
+{% for i in data.controllers %}
+	<option value="{{ i.controller }}"{{ i.selected }}>{{ i.controller }}</option>
+{% endfor %}
+</select>
+</td>
+
+<td style="text-align: right; border: 0px;"><form action="config-tickers.html"> <!-- <form action="search.html"> -->
+<input type="hidden" name="controller" value="{{ data.controller }}">
+Search Ticker: <input type="text" name="search" id="search" value="{{ data.search }}">&nbsp;
+<input type="submit" value="Search">
+</form></td>
+
+</tr></table>
+
+<table id="tickers"><tr>
+<td style="text-align: left; border: none;"><a name="{{ data.controller }}">{{ data.controller }} controller - Tickers: {{ data.settings['total'] }} - Active Tickers: {{ data.settings['selected'] }}</a> - <a href="#top">Back to top</a></td>
+</tr></table>
+
+<table id="tickers">
+<tr>
+<th><input type="checkbox"{{ data.settings['allsel'] }} onclick="update_controller('{{ data.controller }}', this.checked);">&nbsp;Active</th>
+<th>Ticker Name</th>
+<th>Remote Ticker</th>
+<th>Internal Ticker</th>
+<th>Edit</th>
+</tr>
+
+{% for n in data.tickers %}
+
+<tr>
+<td><input id="{{ n.id }}" type="checkbox"{{ n.checked }} onclick="update_list('{{ n.id }}', '{{ n.active }}');"></td>
+<td>{{ n.name }}</td>
+<td>{{ n.remoteticker }}</td>
+<td>{{ n.localticker }}</td>
+<td><input type="button" name="{{ n.localticker }}" value="Edit" onclick="document.location.assign('edit-ticker.html?ticker={{ n.id }}');"></td>
+</tr>
+
+{% endfor %}
+</table><br>
+
+<p><a href="#top">Back to top</a></p>
+<br><br>
+
+
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% block list %}
+{% if data.running == 0 %}
+<br>
+<center>Wallet Balance Stopped</center><br>
+<form action="run-wallet.html" method="GET">
+<center><input type="submit" value="Run Wallet Balance"></center>
+</form>
+{% else %}
+<br>
+<center>Wallet Balance Running</center>
+<form action="stop-wallet.html" method="GET">
+<center><input type="submit" value="Stop Wallet Balance"></center>
+</form>
+<br>
+<code>
+{% for i in data.log_text %}
+{{ i }}<br>
+{% endfor %}
+</code>
+{% endif %}
+
+{% endblock %}

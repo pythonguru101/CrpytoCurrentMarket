@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ticker configuration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+<script language="javascript">
+function activate_button(obj_id) {
+	var add_ticker = document.getElementById('add_ticker');
+	var del_ticker = document.getElementById('del_ticker');
+
+	// -- activate buttons by market selected --
+	if (obj_id.name == "lis_tickers") {
+		var sel_tickers = document.getElementById('sel_tickers');
+
+		if (sel_tickers.length < 2) {
+			add_ticker.disabled = false;
+			del_ticker.disabled = true;
+		} else {
+			add_ticker.disabled = true;
+			del_ticker.disabled = true;
+		}
+	}
+	if (obj_id.name == "sel_tickers") {
+		add_ticker.disabled = true;
+		del_ticker.disabled = false;
+	}
+
+	return;
+}
+function add_ticker() {
+	var modified = document.getElementById('modified');
+	var lis_tickers = document.getElementById('lis_tickers');
+	var sel_tickers = document.getElementById('sel_tickers');
+	var ticker = lis_tickers.value;
+
+	// -- id there are less than 2 tickers add new one --
+	if (sel_tickers.length < 2) {
+		var newoption = document.createElement("OPTION");
+		newoption.setAttribute("value", ticker);
+		var newtext = document.createTextNode(ticker);
+		newoption.appendChild(newtext);
+		sel_tickers.appendChild(newoption);
+
+		// -- if 2 values on sel list don't let add more --
+		if (sel_tickers.length == 2) {
+			var add_ticker = document.getElementById('add_ticker');
+			add_ticker.disabled = true;
+		}
+
+		// -- delete option from lis list --
+		for (i=0; i<lis_tickers.length; i++) {
+			if (lis_tickers.options[i].value == ticker) {
+				lis_tickers.options[i] = null;
+				break;
+			}
+		}
+	}
+
+	// -- add markets to hidden fields --
+	if (sel_tickers.length > 0) {
+		for (var i=0; i<sel_tickers.length; i++) {
+			var item = document.getElementById('market'+i);
+			item.value = sel_tickers.options[i].value ;
+		}
+	}
+
+	modified.value = "1";
+
+	return;
+}
+function del_ticker() {
+	var modified = document.getElementById('modified');
+	var lis_tickers = document.getElementById('lis_tickers');
+	var sel_tickers = document.getElementById('sel_tickers');
+	var ticker = sel_tickers.value;
+
+	var newoption = document.createElement("OPTION");
+	newoption.setAttribute("value", ticker);
+	var newtext = document.createTextNode(ticker);
+	newoption.appendChild(newtext);
+	lis_tickers.appendChild(newoption);
+
+	// -- delete option from sel list --
+	for (i=0; i<sel_tickers.length; i++) {
+		if (sel_tickers.options[i].value == ticker) {
+			sel_tickers.options[i] = null;
+			document.getElementById('market'+i).value = "";
+			break;
+		}
+	}
+
+	// -- add markets to hidden fields --
+	if (sel_tickers.length > 0) {
+		for (var i=0; i<sel_tickers.length; i++) {
+			var item = document.getElementById('market'+i);
+			item.value = sel_tickers.options[i].value ;
+		}
+	}
+
+	modified.value = "1";
+
+	return;
+}
+function confirm_modified() {
+	var response;
+	var modified = document.getElementById('modified');
+
+	if (modified.value == "1") {
+		response = confirm("Do you want to exit without Apply Changes?");
+		if (!response)
+			return false;
+	}
+
+	return true;
+}
+function save_values() {
+	var market0 = document.getElementById('market0').value;
+	var market1 = document.getElementById('market1').value;
+
+	// -- check if there are two markets --
+	if (market0 == "" || market1 == "") {
+		alert("Two markets are needed for saving the pair!");
+		return;
+	}
+
+	// -- update database --
+	document.location.assign('save-pairs.html?controller={{ data.controller }}&market0='+market0+'&market1='+market1);
+
+	return;
+}
+</script>
+</head>
+
+{% if data.finished == 1 %}
+<body onload="window.alert('All changes saved!');">
+{% else %}
+<body>
+{% endif %}
+<a name="top"><center><p>Pairs configuration</p></center></a>
+<br>
+
+<center><ul>
+<li><p><a href="index.html" onclick="return confirm_modified();">&lt;&lt;&nbsp;Back to main page</a></p></li>
+<!-- <li><a href="" onclick="save_values();"><p>Apply Changes</p></a></li> -->
+</ul></center>
+<br>
+
+<input type="hidden" name="modified" id="modified" value="{{ data.modified }}">
+
+<center><p>Select Two Markets</p></center>
+
+<input type="hidden" name="market0" id="market0" value="{{ data.pair[0] }}">
+<input type="hidden" name="market1" id="market1" value="{{ data.pair[1] }}">
+
+<table id="prices" style="width: 100%; border: 0px;"><tr>
+<td style="text-align:right; vertical-align: text-top; border: 0px; width: 45%">Tickers:<br>
+<select size="20" name="lis_tickers" id="lis_tickers" onclick="activate_button(this);" ondblclick="add_ticker();">
+{% for i in data.tickers %}
+	<option value="{{ i.remoteticker }}">{{ i.remoteticker }}</option>
+{% endfor %}
+</select>
+</td>
+<td style="text-align: center;">
+<input type="button" id="add_ticker" value=">>" disabled onclick="add_ticker();">
+<br><br>
+<input type="button" id="del_ticker" value="<<" disabled onclick="del_ticker();">
+</td>
+<td style="text-align:left; vertical-align: text-top; border: 0px; width: 45%;">Pair Selected:<br>
+<select size="20" name="sel_tickers" id="sel_tickers" onclick="activate_button(this);" ondblclick="del_ticker();">
+{% for i in data.pair %}
+	<option value="{{ i }}">{{ i }}</option>
+{% endfor %}
+</select>
+</td>
+
+</tr></table>
+
+<br><br>
+
+<center><input type="button" value="Save changes" onclick="save_values();"></center>
+
+
+</body>
+</html>
+

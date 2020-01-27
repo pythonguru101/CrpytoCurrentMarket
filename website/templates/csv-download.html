@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cryptocurrency ticker edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='datepicker.css') }}" /> 
+<script type="text/javascript" src="{{ url_for('static', filename='datepicker.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='timepicker.js') }}"></script>
+</head>
+
+<body>
+<a name="top"><center><p>Cryptocurrency CSV download</p></center></a>
+<br>
+
+<center><ul>
+<li><p><a href="index.html">&lt;&lt;&nbsp;Back to main page</a></p></li>
+</ul></center>
+<br>
+
+<form action="download.html" method="POST">
+<p>Controller:</p>
+<select id="controller" name="controller">
+{% for i in data.controllers %}
+<option value="{{ i.controller }}">{{ i.controller }}</option>
+{% endfor %}
+</select>
+
+<table><tr>
+<td><br><p>Initial Date:</p>
+<input id="dini" name="dini" class='datepicker' size='11' title='DD-MM-YYYY' value="{{ data.date }}"/></td>
+
+</tr><tr>
+
+<td><br><p>End Date:</p>
+<input id="dend" name="dend" class='datepicker' size='11' title='DD-MM-YYYY' value="{{ data.date }}"/></td>
+</tr></table>
+<br>
+
+<div id="options">
+<select name="option">
+<option value="Prices">Prices</option>
+<option value="Dollars">Dollars</option>
+<option value="Volumes">Volumes</option>
+</select>
+</div>
+<br><br>
+
+<ul>
+<li><input type="submit" value="Download CSV"></li>
+</ul>
+</form>
+
+</body>
+</html>
+

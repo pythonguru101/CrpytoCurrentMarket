@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bot configuration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+</head>
+
+<body>
+
+<center><ul>
+<li><p><a href="index.html">&lt;&lt;&nbsp;Back to main page</a></p></li>
+</ul></center>
+<br>
+
+<form action="save-bot-config.html" method="POST">
+
+<center><p>Bot Configuration</p></center>
+
+<table id="tickers" width="75%">
+<tr>
+
+<td>Spread &gt;=100 (in dollars):</td>
+<td><input type="text" id="spread100" maxlength="10" name="spread100" value="{{ data.bot_config['spread100'] }}"></td>
+
+<tr></tr>
+
+<td>Spread &lt;=100 (in percentage):</td>
+<td><input type="text" id="pct_spread" maxlength="10" name="pct_spread" value="{{ data.bot_config['pct_spread'] }}">%</td>
+
+<tr></tr>
+
+<td>Trade volume (dollars):</td>
+<td><input type="radio" id="volumesel" name="volumesel" value="100.00" onchange="set_volume(this.value);"> 100 $
+<input type="radio" id="volumesel" name="volumesel" value="250.00" onchange="set_volume(this.value);"> 250 $
+<input type="radio" id="volumesel" name="volumesel" value="500.00" onchange="set_volume(this.value);"> 500 $
+<input type="radio" id="volumesel" name="volumesel" value="1000.00" onchange="set_volume(this.value);"> 1000 $
+<input type="radio" id="volumesel" name="volumesel" value="2500.00" onchange="set_volume(this.value);"> 2500 $
+<input type="radio" id="volumesel" name="volumesel" value="5000.00" onchange="set_volume(this.value);"> 5000 $
+<input type="radio" id="volumesel" name="volumesel" value="10000.00" onchange="set_volume(this.value);"> 10000 $<br>
+<input type="text" id="volume" name="volume" value="{{ data.bot_config['volume'] }}"> $
+</td>
+
+<tr></tr>
+
+<td>Check OBV:</td>
+<td>
+<input type="radio" id="check_obv" name="check_obv" value="1"{{ data.bot_config['cobv_yes'] }}>Yes</input>
+<input type="radio" id="check_obv" name="check_obv" value="0"{{ data.bot_config['cobv_no'] }}>No</input>
+</td>
+
+<tr></tr>
+
+<td>RT Narrow Spread (&lt; $):</td>
+<td><input type="text" id="rt_narrow_spread" maxlength="20" name="rt_narrow_spread" value="{{ data.bot_config['rt_narrow_spread'] }}"></td>
+
+<tr></tr>
+
+<td>RT Spread Buy (Multiplier):</td>
+<td><input type="text" id="rt_limit_buy" maxlength="20" name="rt_limit_buy" value="{{ data.bot_config['rt_limit_buy'] }}"></td>
+
+<tr></tr>
+
+<td>RT Spread Sell (Multiplier):</td>
+<td><input type="text" id="rt_limit_sell" maxlength="20" name="rt_limit_sell" value="{{ data.bot_config['rt_limit_sell'] }}"></td>
+
+<tr></tr>
+
+<td colspan="2"><center><input type="submit" value="Save Settings"></center></td>
+
+</tr></table>
+<br>
+
+<script>
+function set_volume(vol_value) {
+	var volume = document.getElementById('volume');
+	volume.value = vol_value;
+	return;
+}
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+{% extends "index.html" %}
+
+{% block list %}
+<a name="top"><center><p>Screener</p></center></a>
+<br>
+<center><p>Last updated: {{ data.last_updated }}</p></center>
+
+{% for i in data.data %}
+<table id="prices" style="width: 100%; border: 0px;"><tr>
+<td style="align:left;">Controller: <select name="controller" id="controller" onchange="get_screener();">
+{% for i in data.controllers %}
+	<option value="{{ i.controller }}"{{ i.selected }}>{{ i.controller }}</option>
+{% endfor %}
+</select>
+</td>
+</tr></table>
+
+<table id="prices" style="width: 100%;">
+<tr>
+<th>Name</th>
+<th>Ticker</th>
+<th>Last Price</th>
+<th>Volume</th>
+<th>Updated</th>
+<th>&nbsp;</th>
+</tr>
+
+{% if i.prices|length == 0 %}
+</table>
+<center>There are no active tickers for this controller</center>
+{% else %}
+{% for n in i.prices %}
+<tr>
+<td id="ticker"><b>{{ n.name }}</b></td>
+<td id="ticker"><b>{{ n.ticker }}</b></td>
+<td id="price"><b>{{ n.last|safe }}</b></td>
+<td id="price"><b>{{ n.volume|safe }}</b></td>
+<td id="price"><b>{{ n.updated|safe }}</b></td>
+<td><input type="button" value="Operate" onclick="document.location.assign('/bot-control.html?ticker={{ n.localticker }}&market={{ data.controller }}');"></td>
+</tr>
+{% endfor %}
+</table>
+<p><a href="#top">Back to top</a></p>
+{% endif %}
+<br><br>
+{% endfor %}
+
+<script>
+function get_screener() {
+	controller = document.getElementById('controller').value;
+	document.location.assign('screener.html?controller='+controller);
+
+	return;
+}
+</script>
+
+{% endblock %}

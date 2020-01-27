@@ -1,0 +1,6 @@
+.idea/
+.DS_Store
+*.pyc
+*.log
+/website/test.py
+*.xml

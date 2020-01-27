@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% block list %}
+{% if data.running_state == 0 %}
+<br>
+<center>Bot Stopped</center><br>
+<form action="run.html" method="GET">
+<center><input type="submit" value="Run Bot"></center>
+<br>
+<p style="color: red; text-align: center;">- This is last bot log recorded -</p>
+</form>
+{% else %}
+<br>
+{% if data.stopping_state == 0 %}
+	<center>Bot Running</center>
+{% else %}
+	<center>Bot stopping now, please wait!</center>
+{% endif %}
+<form action="stop.html" method="GET">
+<center><input type="submit" value="Stop Bot"></center>
+</form>
+{% endif %}
+<br>
+<code>
+{% for i in data.log_text %}
+{{ i }}<br>
+{% endfor %}
+</code>
+
+{% endblock %}

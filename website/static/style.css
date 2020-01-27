@@ -1,0 +1,274 @@
+/* menu */
+
+/* normal */
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #CCC;
+}
+
+li {
+	float: left;
+}
+
+/* menu view */
+li a, .dropbtn {
+	display: inline-block;
+	color: Black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+	color: black;
+	background-color: #AAA;
+}
+
+li.dropdown {
+	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	color: white;
+	background-color: #AAA;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+
+.dropdown-content a:hover {
+	background-color: #777;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+
+/*  prices */
+#prices th {
+	font-family: sans-serif;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+}
+
+#prices {
+	font-family: sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#prices td:first-child { text-align: left; }
+
+#prices td { text-align: right; }
+
+#prices td, #prices th {
+	border: 1px solid #ddd;
+	padding: 3px;
+}
+
+#prices tr:nth-child(even) { background-color: #f2f2f2; }
+
+#prices tr:hover { background-color: #ddd; }
+
+#prices p { 
+	font-family: sans-serif;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+/* cmc */
+.cmc {
+	font-family: sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.cmc th {
+    font-family: sans-serif;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    background-color: DarkBlue;
+    color: white;
+}
+
+.cmc td {
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+.cmc1 {
+	font-family: sans-serif;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    background-color: DarkBlue;
+    color: white;
+}
+
+.cmc2 {
+	border: 1px solid #ddd;
+    padding: 3px;
+}
+
+/* tickers */
+#tickers th {
+	font-family: sans-serif;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+}
+
+#tickers {
+	font-family: sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+}
+
+#tickers td:first-child { text-align: center; }
+
+#tickers td, #tickers th {
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+#tickers tr:nth-child(even) { background-color: #f2f2f2; }
+
+#tickers tr:hover { background-color: #ddd; }
+
+#tickers th {
+	font-family: sans-serif;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+}
+
+#tickers p { 
+	font-family: sans-serif;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+#tickers input[type=button], #tickers input[type=submit], #tickers input[type=reset] {
+	border: 0px;
+	color: Black;
+	padding: 0px 16px;
+	text-decoration: none;
+	margin: 0px 0px;
+	cursor: pointer;
+}
+
+#tickers input[type=button]:hover, #tickers input[type=submit]:hover, #tickers input[type=reset]:hover {
+	background-color: DarkBlue;
+	border: 0px;
+	color: white;
+	cursor: pointer;
+}
+
+
+/* strategies */
+#tickers th {
+	font-family: sans-serif;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+}
+
+#tickers {
+	font-family: sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#tickers td:first-child { text-align: center; }
+
+#tickers td, #tickers th {
+    border: 1px solid #ddd;
+    padding: 3px;
+}
+
+#tickers tr:nth-child(even) { background-color: #f2f2f2; }
+
+#tickers tr:hover { background-color: #ddd; }
+
+#tickers th {
+	font-family: sans-serif;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: center;
+	background-color: DarkBlue;
+	color: white;
+}
+
+#tickers p { 
+	font-family: sans-serif;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+#tickers input[type=button], #tickers input[type=submit], #tickers input[type=reset] {
+	border: 0px;
+	color: Black;
+	padding: 0px 16px;
+	text-decoration: none;
+	margin: 0px 0px;
+	cursor: pointer;
+}
+
+#tickers input[type=button]:hover, #tickers input[type=submit]:hover, #tickers input[type=reset]:hover {
+	background-color: DarkBlue;
+	border: 0px;
+	color: white;
+	cursor: pointer;
+}
+
+
+
+
+/* edit ticker */
+#edticker input[type=button], #edticker input[type=submit], #edticker input[type=reset] {
+	background-color: #AAA;
+	border: 3px solid Black;
+	color: Black;
+	padding: 10px 16px;
+	margin: 10px 10px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#edticker input[type=button]:hover, #edticker input[type=submit]:hover, #edticker input[type=reset]:hover {
+	background-color: DarkBlue;
+	border: 3px solid Black;
+	color: white;
+	cursor: pointer;
+}
+
+#edticker input[type=text]:focus {
+	border: 3px solid #555;
+}
+

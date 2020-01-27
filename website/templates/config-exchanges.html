@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exchange configuration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+<script language="javascript">
+function update_controller(controller, checked) {
+	var modified = document.getElementById('modified');
+	var active = "0";
+
+	if (checked) {
+		active = "1";
+	}
+
+	// -- update database --
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', 'update-controller.html?controller='+controller+'&active='+active);
+	xhr.send();
+
+	modified.value="1";
+
+	return;
+}
+function confirm_modified() {
+	var response;
+	var modified = document.getElementById('modified');
+
+	if (modified.value == "1") {
+		response = confirm("Do you want to exit without Apply Changes?");
+		if (!response)
+			return false;
+	}
+	return true;
+}
+</script>
+</head>
+
+{% if data[0].finished == 1 %}
+<body onload="window.alert('All changes saved!');">
+{% else %}
+<body>
+{% endif %}
+<center><ul>
+<li><p><a href="index.html" onclick="return confirm_modified();">&lt;&lt;&nbsp;Back to main page</a></p></li>
+<li><a href="apply.html"><p>Apply Changes</p></a></li>
+</ul></center>
+<br>
+
+<input type="hidden" name="modified" id="modified" value="{{ data[0].modified }}">
+
+<center><p>Controller Configuration</p></center>
+
+<table id="tickers">
+<tr>
+<th>Active</th>
+<th>Exchange Name</th>
+</tr>
+{% for i in data %}
+<tr>
+<td><input id="{{ i.controller }}" type="checkbox"{{ i.active }} onclick="update_controller('{{ i.controller }}', this.checked);"></td>
+<td>{{ i.controller }}</td>
+</tr>
+{% endfor %}
+</table><br>
+
+
+</body>
+</html>
+

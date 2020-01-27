@@ -1,0 +1,153 @@
+{% if data.args_filter == 0 %}
+	{% extends "index-ops.html" %}
+{% else %}
+	{% extends "index-ops1.html" %}
+{% endif %}
+
+{% block list %}
+<a name="top"><center><p>Operations</p></center></a>
+
+<form action="operations.html" method="GET">
+<table id="prices" style="width: 100%; border: 0px;"><tr>
+
+<td style="text-align:center;">Start Date:<br /> 
+<input id="start_date" name="start_date" class='datepicker' size='11' title='DD-MM-YYYY' value="{{ data.argums['start_date'] }}"/></td>
+
+<td style="text-align:center;">End Date:<br /> 
+<input id="end_date" name="end_date" class='datepicker' size='11' title='DD-MM-YYYY' value="{{ data.argums['end_date'] }}"/></td>
+
+<td style="text-align:center;">Ticker:<br />
+<select name="ticker" id="ticker">
+{% for i in data.tickers %}
+{% if i.ticker == "All" %}
+<option value=""{{ i.selected }}>{{ i.ticker }}</option>
+{% else %}
+<option value="{{ i.ticker }}"{{ i.selected }}>{{ i.ticker }}</option>
+{% endif %}
+{% endfor %}
+</select>
+</td>
+
+<td style="text-align:center;">Op. Type:<br />
+<select name="op_type" id="op_type">
+{% for i in data.op_types %}
+{% if i.op_type == "All" %}
+<option value=""{{ i.selected }}>{{ i.op_type }}</option>
+{% else %}
+<option value="{{ i.op_type }}"{{ i.selected }}>{{ i.op_type }}</option>
+{% endif %}
+{% endfor %}
+</select>
+</td>
+
+<td style="text-align:center;">Status type:<br />
+<select name="status_type" id="status_type">
+{% for i in data.status_types %}
+{% if i. status_type== "All" %}
+<option value=""{{ i.selected }}>{{ i.status_type }}</option>
+{% else %}
+<option value="{{ i.status_type }}"{{ i.selected }}>{{ i.status_type }}</option>
+{% endif %}
+{% endfor %}
+</select>
+
+<td style="text-align:center;">
+{% if data.args_filter == 0 %}
+<input type="submit" value="Apply Filters">
+{% else %}
+<input type="button" value="Remove Filters" onclick="document.location.assign('operations.html');">
+{% endif %}
+</form>
+</td>
+
+<td style="text-align:center;">
+<input type="button" name="csv" value="Download CSV" onclick="document.location.assign('/csv-operations.html');">
+</td>
+
+</tr></table>
+
+{% if data.operations|length > 0 %}
+<center><table id="tickers"><tr>
+<table id="tickers">
+<tr>
+<th><b>Time</b></th>
+<th><b>Ticker 1</b></th>
+<th><b>Op.</b></th>
+<th><b>Price</b></th>
+<th><b>&nbsp;</b></th>
+<th><b>Ticker 2</b></th>
+<th><b>Op.</b></th>
+<th><b>Price</b></th>
+<th><b>Spread</b></th>
+<th><b>Status</b></th>
+<th>&nbsp;</th>
+</tr>
+
+{% for i in data.operations %}
+<tr>
+<td><b>{{ i.pdate }} {{ i.ptime }}</b></td>
+<td style="text-align: left"><b>{{ i.ticker1[3:] }}</b></td>
+{% if i.operation1 == "B" %}
+<td style="text-align: left"><b>BUY</b></td>
+{% else %}
+<td style="text-align: left"><b>SELL</b></td>
+{% endif %}
+<td style="text-align: right"><b>{{ i.price1 }}</b></td>
+<td>&nbsp;</td>
+<td style="text-align: left"><b>{{ i.ticker2[3:] }}</b></td>
+{% if i.operation2 == "B" %}
+<td style="text-align: left"><b>BUY</b></td>
+{% else %}
+<td style="text-align: left"><b>SELL</b></td>
+{% endif %}
+<td style="text-align: right"><b>{{ i.price2 }}</b></td>
+<td style="text-align: right"><b>{{ i.spread }}</b></td>
+<td style="text-align: left"><b>{{ i.status }}</b></td>
+<td><input type="button" name="{{ i.id }}" value="Review" onclick="document.location.assign('operation-review.html?id={{ i.id }}');"></td>
+</tr>
+
+{% endfor %}
+</table><br>
+
+<center><table cellspacing="10"><tr>
+{% for i in data.pages %}
+<td style="border-style: solid; border-width: 1px">&nbsp;{{ i|safe }}&nbsp;</td>
+{% endfor %}
+</tr></table></center>
+
+{% else %}
+<center><table id="tickers"><tr>
+<table id="tickers">
+<tr>
+<th><b>Time</b></th>
+<th><b>Ticker 1</b></th>
+<th><b>Op.</b></th>
+<th><b>Price</b></th>
+<th><b>&nbsp;</b></th>
+<th><b>Ticker 2</b></th>
+<th><b>Op.</b></th>
+<th><b>Price</b></th>
+<th><b>Status</b></th>
+<th>&nbsp;</th>
+</tr></table>
+
+<center>There are no operations yet on this exchange</center>
+{% endif %}
+
+<script>
+function get_csv() {
+	var start_date = document.getElementById('start_date').value;
+	var end_date = document.getElementById('end_date').value;
+	var ticker = document.getElementById('ticker').value;
+	var op_type = document.getElementById('op_type').value;
+	var status_type = document.getElementById('status_type').value;
+
+	url = "/csv-operations.html?start_date="+start_date+"&end_date="+end_date+"&ticker="+ticker+"&op_type="+op_type+"&status_type="+status_type;
+	document.location.assign(url);
+
+	return
+}
+</script>
+
+
+{% endblock %}

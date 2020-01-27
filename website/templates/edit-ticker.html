@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Ticker edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+</head>
+
+<body>
+<a name="top"><center><p>Ticker edit</p></center></a>
+<br>
+
+<center><ul>
+<li><a href="config-tickers.html"><p>&lt;&lt;&nbsp;Back to tickers configuration</p></a></li>
+</ul></center>
+<br>
+
+<form action="save-ticker.html">
+<input type="hidden" name="id" value="{{ data.ticker.id }}">
+<p>Active: <input type="checkbox" name="active"{{ data.ticker.active }}></p><br><br>
+<p>Name: </p>
+<input type="text" id="edticker" name="name" value="{{ data.ticker.name }}" size="20"><br><br>
+<p>Local Ticker: </p>
+<input type="text" id="edticker" name="localticker" value="{{ data.ticker.localticker }}" size="15"  maxlength="15"><br><br>
+<p>Remote Ticker: </p>
+<input type="text" id="edticker" name="remoteticker" value="{{ data.ticker.remoteticker }}" size="15"  maxlength="15"><br><br>
+<p>Controller:</p>
+<select name="controller">
+{% for i in data.controllers %}
+<option value="{{ i.controller }}"{{ i.selected }}>{{ i.controller }}</option>
+{% endfor %}
+</select><br><br><br>
+
+<ul>
+<li><input id="edticker" type="submit" value="Make Changes"></li>
+<li><input id="edticker" type="reset"></li>
+</ul>
+</form>
+
+<br>
+
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Log Detail for {{ data.controller }} on {{ data.datehour }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<meta http-equiv="pragma" content="no-cache">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}" />
+<script language="javascript">
+function update_list() {
+	var modified = document.getElementById('modified');
+
+	var xhr = new XMLHttpRequest();
+	{% for i in data.controllers %}
+		var fee = document.getElementById('{{ i.controller }}').value;
+		var url = 'save-fees.html?controller={{ i.controller }}&fee='+fee;
+		xhr.open('GET', url, false);
+		xhr.send();
+	{% endfor %}
+
+	modified.value="1";
+
+	return;
+}
+function confirm_modified() {
+	var response;
+	var modified = document.getElementById('modified');
+
+	if (modified.value == "1") {
+		response = confirm("Do you want to exit without Apply Changes?");
+		if (!response)
+			return false;
+	}
+
+	return true;
+}
+</script>
+</head>
+
+<body>
+
+<center><ul>
+<li><p><a href="pairs-log.html">&lt;&lt;&nbsp;Back to Opportunities Log</a></p></li>
+</ul></center>
+<br>
+
+<center><p>Log Detail for {{ data.datehour }}</p></center>
+
+<table id="prices" style="width: 100%;">
+<tr>
+<th>Exchange</th>
+<th>Ticker</th>
+<th>Price</th>
+<th>Exchange</th>
+<th>Ticker</th>
+<th>Price</th>
+<th>B/S</th>
+<th>Pot.Profit</th>
+</tr>
+{% for i in data.log %}
+<tr>
+<td id="ticker">{{ i.controller1 }}</td>
+<td id="ticker">{{ i.ticker1 }}</td>
+<td id="price">{{ i.price1|safe }}</td>
+<td id="ticker">{{ i.controller2 }}</td>
+<td id="ticker">{{ i.ticker2 }}</td>
+<td id="price">{{ i.price2|safe }}</td>
+<td id="ticker">{{ i.op_type }}</td>
+<td id="price">{{ i.pot_profit }}$</td>
+</tr>
+{% endfor %}
+</table><br>
+
+</body>
+</html>
+
+
+
