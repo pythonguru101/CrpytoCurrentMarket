@@ -30,5 +30,4 @@ This programs it is an excellent base for developing trading bots or financial a
 
 ### Author ###
 
-Juan Luis Martinez
-mulder1@gmail.com
+pythonguru101@gmail.com
